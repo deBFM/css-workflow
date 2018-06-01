@@ -1,0 +1,30 @@
+{
+  "name": "css-workflow",
+  "version": "0.0.3",
+  "description": "CSS-Workflow with SASS and BrowserSync",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deBFM/css-workflow"
+  },
+  "config": {
+    "rootFolder": "../../local_development",
+    "cssFolder": "w.nsf/css",
+    "proxyWatchFiles": "w.nsf/css/*.css",
+    "upstreamHttpServer": "http://www4.dmz.hamburger-software.de"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "build": "node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "css-workflow": "./start.js",
+    "css-workflow-build": "./build.js"
+  },
+  "author": "Dennis Kronbuegel",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.24.4",
+    "shelljs": "^0.8.2"
+  }
+}
