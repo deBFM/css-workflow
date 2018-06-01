@@ -34,22 +34,20 @@ function startSASS() {
     cdRoot();
     shell.cd(yargs.cssFolder);
     let sassCmd = `sass --watch ${yargs.cssPrecompilerInputFile}:${yargs.cssPrecompilerOutputFileDevelopment}`;
-    //TODO einkommentieren
-    //shell.exec(sassCmd, {async: true});
+    shell.exec(sassCmd, {async: true});
 }
 
 function startSASSBuild() {
     cdRoot();
     shell.cd(yargs.cssFolder);
     let sassBuildCmd = `sass --no-cache --style compressed ${yargs.cssPrecompilerInputFile} ${yargs.cssPrecompilerOutputFileProduction}`;
-    //TODO einkommentieren
-    //shell.exec(sassBuildCmd, {async: true});
+    shell.exec(sassBuildCmd, {async: true});
 }
 
 function startBrowserSync() {
     cdRoot();
     let browsersyncCmd = `browser-sync start --proxy "${yargs.upstreamHttpServer}" --files "${yargs.browsersyncWatchFiles}" --serveStatic "."`;
-    //shell.exec(browsersyncCmd, {async: true});
+    shell.exec(browsersyncCmd, {async: true});
 }
 
 
