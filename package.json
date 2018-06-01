@@ -1,6 +1,6 @@
 {
   "name": "css-workflow",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CSS-Workflow with SASS and BrowserSync",
   "repository": {
     "type": "git",
