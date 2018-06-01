@@ -1,6 +1,6 @@
 {
   "rootFolder": "http_server_root",
-  "cssFolder": "w.nsf/css",
+  "cssFolder": "../../w/WebContent/css",
   "cssPrecompilerInputFile": "hs.scss",
   "cssPrecompilerOutputFileProduction": "hs.css",
   "cssPrecompilerOutputFileDevelopment": "hs_static.css",

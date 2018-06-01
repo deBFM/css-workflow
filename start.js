@@ -25,58 +25,65 @@ function arefoldersAvailable() {
     return true; //debug
 }
 
-function cdRoot() {
-    shell.cd(workfolder);
-    shell.cd(yargs.rootFolder);
-}
-
 function startSASS() {
-    cdRoot();
+    shell.cd(workfolder);
     shell.cd(yargs.cssFolder);
     let sassCmd = `sass --watch ${yargs.cssPrecompilerInputFile}:${yargs.cssPrecompilerOutputFileDevelopment}`;
     shell.exec(sassCmd, {async: true});
 }
 
 function startSASSBuild() {
-    cdRoot();
+    shell.cd(workfolder);
     shell.cd(yargs.cssFolder);
     let sassBuildCmd = `sass --no-cache --style compressed ${yargs.cssPrecompilerInputFile} ${yargs.cssPrecompilerOutputFileProduction}`;
     shell.exec(sassBuildCmd, {async: true});
 }
 
 function startBrowserSync() {
-    cdRoot();
+    shell.cd(workfolder);
+    shell.cd(yargs.rootFolder);
     let browsersyncCmd = `browser-sync start --proxy "${yargs.upstreamHttpServer}" --files "${yargs.browsersyncWatchFiles}" --serveStatic "."`;
     shell.exec(browsersyncCmd, {async: true});
 }
-
 
 function getYargs() {
     return require('yargs')
         .usage('Usage: $0 <command> [options]')
         .command("run", "launches your development session backed by SASS & Browser-Sync", {
-            rootFolder: {
+            rootFolder: { //TODO RENAME
                 alias: 'root',
                 default: defaultConfig.rootFolder
+                //TODO Info
             },
             cssFolder: {
                 alias: 'css',
                 default: defaultConfig.cssFolder
-            }, cssPrecompilerInputFile: {
+                //TODO Info
+            },
+            cssPrecompilerInputFile: {
                 alias: 'cssIn',
                 default: defaultConfig.cssPrecompilerInputFile
-            }, cssPrecompilerOutputFileProduction: {
+                //TODO Info
+            },
+            cssPrecompilerOutputFileProduction: {
                 alias: 'cssOut',
                 default: defaultConfig.cssPrecompilerOutputFileProduction
-            }, cssPrecompilerOutputFileDevelopment: {
+                //TODO Info
+            },
+            cssPrecompilerOutputFileDevelopment: {
                 alias: 'cssOutDev',
                 default: defaultConfig.cssPrecompilerOutputFileDevelopment
-            }, browsersyncWatchFiles: {
+                //TODO Info
+            },
+            browsersyncWatchFiles: {
                 alias: 'watch',
                 default: defaultConfig.browsersyncWatchFiles
-            }, upstreamHttpServer: {
+                //TODO Info Relativ to rootFolder
+            },
+            upstreamHttpServer: {
                 alias: 'upstream',
                 default: defaultConfig.upstreamHttpServer
+                //TODO Info
             }
         })
         .command("build", "processes --cssIn into --cssOut", {
