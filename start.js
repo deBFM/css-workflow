@@ -1,20 +1,34 @@
 #!/usr/bin/env node
 let shell = require('shelljs');
-let nconf = require('nconf');
+let yargs = require('yargs')
+    .usage('Usage: $0 <command> [options]')
+    //.config(defaultConfig)
+    .command("start", "launches your development session backed by SASS & Browser-Sync", {
+        rootFolder: {
+            alias: 'root',
+            default:''
+        }
+    })
+    .command("build", "processes --cssPrecompilerInputFile into --cssPrecompilerOutputFileProduction", {
+        rootFolder: {
+            alias: 'root',
+            default:''
+        }
+    })
+    .demandCommand(1,1)
+    .epilogue('by Dennis Kronbügel 2018')
+    .argv;
 
-//Configure nconf
-nconf.argv().file(__dirname + '/config.json');
 let workfolder = shell.pwd().stdout;
-
 if (arefoldersAvailable()) {
-    process();
+    run();
 } else {
     console.error('At least one of the configured folders didn´t exist')
     process.exitCode = 1;
 }
 
-function process() {
-    if (nconf.get('build')) {
+function run() {
+    if (yargs.build) {
         startSASSBuild();
     } else {
         startSASS();
@@ -28,32 +42,26 @@ function arefoldersAvailable() {
 }
 
 function cdRoot() {
-    console.log("current location before root() is: " + shell.pwd().stdout);
     shell.cd(workfolder);
-    shell.cd(nconf.get('rootFolder'));
-    console.log("current location is: " + shell.pwd().stdout);
+    shell.cd(yargs.rootFolder);
 }
 
 function startSASS() {
     cdRoot();
-    shell.cd(nconf.get('cssFolder'));
-    let sassCmd = `sass --watch ${nconf.get('cssPrecompilerInputFile')}:${nconf.get('cssPrecompilerOutputFileDevelopment')}`;
-    console.log("sassCmd: " + sassCmd)
+    shell.cd(yargs.cssFolder);
+    let sassCmd = `sass --watch ${yargs.cssPrecompilerInputFile}:${yargs.cssPrecompilerOutputFileDevelopment}`;
     //shell.exec(sassCmd, {async: true});
 }
 
 function startSASSBuild() {
     cdRoot();
-    shell.cd(nconf.get('cssFolder'));
-    let sassBuildCmd = `sass --no-cache --style compressed ${nconf.get('cssPrecompilerInputFile')} ${nconf.get('cssPrecompilerOutputFileProduction')}`;
-    console.log("sassBuildCmd: " + sassBuildCmd)
-    shell.exec(sassBuildCmd, {async: true});
+    shell.cd(yargs.cssFolder);
+    let sassBuildCmd = `sass --no-cache --style compressed ${yargs.cssPrecompilerInputFile} ${yargs.cssPrecompilerOutputFileProduction}`;
+    //shell.exec(sassBuildCmd, {async: true});
 }
 
 function startBrowserSync() {
     cdRoot();
-    let browsersyncCmd = `browser-sync start --proxy "${nconf.get('upstreamHttpServer')}" --files "${nconf.get('browsersyncWatchFiles')}" --serveStatic "."`;
-    console.log("browsersyncCmd: " + browsersyncCmd);
+    let browsersyncCmd = `browser-sync start --proxy "${yargs.upstreamHttpServer}" --files "${yargs.browsersyncWatchFiles}" --serveStatic "."`;
     //shell.exec(browsersyncCmd, {async: true});
 }
-
