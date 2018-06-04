@@ -11,6 +11,8 @@ css-workflow is a SASS & Browsersync startup script, which enables you to startu
 
 [node.js/npm](https://nodejs.org/en/download/)
 
+[SASS](https://sass-lang.com/install)
+
 ## Install
 ~~~
 npm i css-workflow -g
@@ -19,11 +21,17 @@ npm i css-workflow -g
 ~~~
 css-worflow run
 ~~~
-this would use our default configuration, but you can specify them yourself with parameters.
+this would use our default configuration, so you have to specify some options
 
-### Parameters
+(Optional) After you have finished your work, you can run
+~~~
+css-workflow build
+~~~
+to build your production css files.
 
-Parameter | Info
+### Options
+
+Option | Info
   -------------  | -------------
   --cssRootFolder | *The root folder of your local css (scss) files*
   --cssIn | *scss file or a directory*
@@ -33,12 +41,15 @@ Parameter | Info
   --browsersyncWatchFiles | *files which triggers a browser-sync*
   --browsersyncUpstreamHttpServer | *the upstream http Server*
 
-### Build CSS
-~~~
-css-workflow build
-~~~
+### Chrome Developer Tools
 
-TODO: Requires pre installed SASS! Eventuell auf node-sass wechseln oder ein Kommentar in die ReadMe setzen. 
+ #### Requirement
+    Activate CSS-Sourcemaps in the Developer settings
+ 
+ #### About
+ You can use Chrome Workspaces to make changes directly from Chrome.
+ You can play with css settings in the CSS Properties Explorer, this changes aren´t saved.
+ To save a file simply open the scss file under Chrome (there clickable filename in the CSS Properties Explorer) and save it.
 
 [npm-url]: https://www.npmjs.com/package/css-workflow
 [npm-image]: https://img.shields.io/npm/v/css-workflow.svg
