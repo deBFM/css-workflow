@@ -1,9 +1,9 @@
 {
-  "rootFolder": "http_server_root",
-  "cssFolder": "../../w/WebContent/css",
-  "cssPrecompilerInputFile": "hs.scss",
-  "cssPrecompilerOutputFileProduction": "hs.css",
-  "cssPrecompilerOutputFileDevelopment": "hs_static.css",
+  "cssRootFolder": "../../w/WebContent/css",
+  "cssIn": "hs.scss",
+  "cssOut": "hs.css",
+  "cssOutDev": "hs_static.css",
+  "browsersyncRootFolder": "http_server_root",
   "browsersyncWatchFiles": "w.nsf/css/*.css",
-  "upstreamHttpServer": "http://www4.dmz.hamburger-software.de"
+  "browsersyncUpstreamHttpServer": "http://www4.dmz.hamburger-software.de"
 }

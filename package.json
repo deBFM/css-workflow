@@ -7,11 +7,11 @@
     "url": "https://github.com/deBFM/css-workflow"
   },
   "scripts": {
-    "start": "node start.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "css-workflow": "./start.js"
+    "css-workflow": "./index.js"
   },
   "author": "Dennis Kronbuegel",
   "license": "ISC",
