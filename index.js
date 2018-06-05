@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 let defaultConfig = require(__dirname + '/defaultConfig.json');
 let shell = require('shelljs');
-let yargs = getYargs();
+let bs = require('browser-sync').create();
+let path = require('path');
+let fs = require('fs');
+let sass = require('node-sass');
+let chokidar = require('chokidar');
+let yargs = initYargs();
+
 
 let workfolder = shell.pwd().stdout;
 if (arefoldersAvailable()) {
@@ -16,7 +22,7 @@ function run() {
         startSASSBuild();
     } else if (yargs._.includes('run')) {
         startSASS();
-        startBrowserSync();
+        // startBrowserSync();
     }
 }
 
@@ -25,12 +31,35 @@ function arefoldersAvailable() {
     return true; //debug
 }
 
+function asPosixPath(path) {
+    return path.replace(/\\/g, '/');
+}
+
 function startSASS() {
-    shell.cd(workfolder);
-    shell.cd(yargs.cssRootFolder);
-    let sassCmd = `sass --watch ${yargs.cssIn}:${yargs.cssOutDev}`;
-    console.log (sassCmd);
-    shell.exec(sassCmd, {async: true});
+    let root = path.normalize(path.isAbsolute(yargs.cssRootFolder) ? yargs.cssRootFolder : `${workfolder}/${yargs.cssRootFolder}`);
+    let watchFiles = `${root}/**/*.scss`;
+
+    chokidar.watch(asPosixPath(watchFiles), {ignored: /\*\.css/}).on('change', (event, path) => {
+        console.log('changed');
+        sass.render({
+            file: 'd:/repositorys/GIT/website/w/WebContent/css/hs.scss',
+            outFile: 'd:/repositorys/GIT/website/w/WebContent/css/hs.css',
+            sourceMap: 'd:/repositorys/GIT/website/w/WebContent/css/hs.css.map', // you can set it to `true` as well, see readme
+        }, function (err, result) {
+            console.log(err);
+            console.log(result);
+
+            //TODO Write Files with fs
+            //fs.  (result.css, 'd:/repositorys/GIT/website/w/WebContent/css/hs.css');
+            //fs.  result.map, 'd:/repositorys/GIT/website/w/WebContent/css/hs.css.map');
+        })
+
+    });
+    /*   shell.cd(workfolder);
+       shell.cd(yargs.cssRootFolder);
+       let sassCmd = `sass --watch ${yargs.cssIn}:${yargs.cssOutDev}`;
+       console.log(sassCmd);
+       shell.exec(sassCmd, {async: true});*/
 }
 
 function startSASSBuild() {
@@ -41,18 +70,21 @@ function startSASSBuild() {
 }
 
 function startBrowserSync() {
-    shell.cd(workfolder);
-    shell.cd(yargs.browsersyncRootFolder);
-    let browsersyncCmd = `browser-sync start --proxy "${yargs.browsersyncUpstreamHttpServer}" --files "${yargs.browsersyncWatchFiles}" --serveStatic "."`;
-    shell.exec(browsersyncCmd, {async: true});
+    let root = path.normalize(path.isAbsolute(yargs.browsersyncRootFolder) ? yargs.browsersyncRootFolder : `${workfolder}/${yargs.browsersyncRootFolder}`);
+    let watchFiles = path.normalize(`${root}/${yargs.browsersyncWatchFiles}`);
+    bs.watch(watchFiles).on("change", bs.reload);
+    bs.init({
+        serveStatic: [root],
+        proxy: yargs.browsersyncUpstreamHttpServer
+    });
 }
 
-function getYargs() {
+function initYargs() {
     return require('yargs')
         .usage('Usage: $0 <command> [options]')
         .command("run", "launches your development session backed by SASS & Browser-Sync", {
             cssRootFolder: {
-                alias: 'r',
+                alias: 'cr',
                 default: defaultConfig.cssRootFolder,
                 describe: ''
             },
@@ -72,6 +104,7 @@ function getYargs() {
                 describe: 'css filename for development'
             },
             browsersyncRootFolder: {
+                alias: 'br',
                 default: defaultConfig.browsersyncRootFolder,
                 describe: 'root folder to server static content'
             },
