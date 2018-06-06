@@ -10,9 +10,7 @@ css-workflow is a SASS & Browsersync startup script, which enables you to startu
 ## Requirements
 
 [node.js/npm](https://nodejs.org/en/download/)
-
 Compiling on Windows machines requires the [node-gyp prerequisites](https://github.com/nodejs/node-gyp#on-windows).
-
 
 ## Install
 ~~~
@@ -20,24 +18,17 @@ npm i css-workflow -g
 ~~~
 ## Usage
 ~~~
-css-worflow run
+css-worflow
 ~~~
 this would use our default configuration, so you have to specify some options
-
-(Optional) After you have finished your work, you can run
-~~~
-css-workflow build
-~~~
-to build your production css files.
 
 ### Options
 
 Option | Info
   -------------  | -------------
   --cssRootFolder | *The root folder of your local css (scss) files*
-  --cssIn | *scss file or a directory*
-  --cssOut | *css file or a directory*
-  --cssOutDev | *css file used for development*
+  --cssIn | *scss file*
+  --cssOut | *css file(s)*
   --browsersyncRootFolder | *the static root folder used by the web-proxy (browser-sync)*
   --browsersyncWatchFiles | *files which triggers a browser-sync*
   --browsersyncUpstreamHttpServer | *the upstream http Server*
