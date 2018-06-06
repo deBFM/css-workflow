@@ -10,6 +10,7 @@ css-workflow is a SASS & Browsersync startup script, which enables you to startu
 ## Requirements
 
 [node.js/npm](https://nodejs.org/en/download/)
+
 Compiling on Windows machines requires the [node-gyp prerequisites](https://github.com/nodejs/node-gyp#on-windows).
 
 ## Install
