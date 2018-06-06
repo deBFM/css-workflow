@@ -8,7 +8,6 @@ let sass = require('node-sass');
 let chokidar = require('chokidar');
 let yargs = initYargs();
 
-
 let workfolder = shell.pwd().stdout;
 if (arefoldersAvailable()) {
     run();
@@ -43,9 +42,6 @@ function startSASS() {
         });
         for (let outFile of outFiles) {
             let mapFile = outFile + '.map';
-            console.log(inFile);
-            console.log(outFile);
-            console.log(mapFile);
             sass.render({
                 file: inFile,
                 outFile: outFile,
@@ -65,13 +61,6 @@ function startSASS() {
             })
         }
     });
-}
-
-function startSASSBuild() {
-    shell.cd(workfolder);
-    shell.cd(yargs.cssRootFolder);
-    let sassBuildCmd = `sass --no-cache --style compressed ${yargs.cssIn} ${yargs.cssOut}`;
-    shell.exec(sassBuildCmd, {async: true});
 }
 
 function startBrowserSync() {
