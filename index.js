@@ -18,16 +18,13 @@ if (arefoldersAvailable()) {
 }
 
 function run() {
-    if (yargs._.includes('build')) {
-        startSASSBuild();
-    } else if (yargs._.includes('run')) {
-        startSASS();
-        // startBrowserSync();
-    }
+    startSASS();
+    startBrowserSync();
 }
 
 function arefoldersAvailable() {
     //TODO: check all folders
+    //fs.access
     return true; //debug
 }
 
@@ -39,27 +36,35 @@ function startSASS() {
     let root = path.normalize(path.isAbsolute(yargs.cssRootFolder) ? yargs.cssRootFolder : `${workfolder}/${yargs.cssRootFolder}`);
     let watchFiles = `${root}/**/*.scss`;
 
-    chokidar.watch(asPosixPath(watchFiles), {ignored: /\*\.css/}).on('change', (event, path) => {
-        console.log('changed');
-        sass.render({
-            file: 'd:/repositorys/GIT/website/w/WebContent/css/hs.scss',
-            outFile: 'd:/repositorys/GIT/website/w/WebContent/css/hs.css',
-            sourceMap: 'd:/repositorys/GIT/website/w/WebContent/css/hs.css.map', // you can set it to `true` as well, see readme
-        }, function (err, result) {
-            console.log(err);
-            console.log(result);
-
-            //TODO Write Files with fs
-            //fs.  (result.css, 'd:/repositorys/GIT/website/w/WebContent/css/hs.css');
-            //fs.  result.map, 'd:/repositorys/GIT/website/w/WebContent/css/hs.css.map');
-        })
-
+    chokidar.watch(asPosixPath(watchFiles), {ignored: /\*\.css/}).on('change', () => {
+        let inFile = path.join(root, yargs.cssIn);
+        let outFiles = yargs.cssOut.map(item => {
+            return path.join(root, item);
+        });
+        for (let outFile of outFiles) {
+            let mapFile = outFile + '.map';
+            console.log(inFile);
+            console.log(outFile);
+            console.log(mapFile);
+            sass.render({
+                file: inFile,
+                outFile: outFile,
+                sourceMap: mapFile,
+            }, function (err, result) {
+                if (err) console.error(err);
+                fs.writeFile(outFile, result.css, err => {
+                        if (err) throw err;
+                        console.log(`Saved: ${outFile}`);
+                    }
+                );
+                fs.writeFile(mapFile, result.map, err => {
+                        if (err) throw err;
+                        console.log(`Saved: ${mapFile}`);
+                    }
+                );
+            })
+        }
     });
-    /*   shell.cd(workfolder);
-       shell.cd(yargs.cssRootFolder);
-       let sassCmd = `sass --watch ${yargs.cssIn}:${yargs.cssOutDev}`;
-       console.log(sassCmd);
-       shell.exec(sassCmd, {async: true});*/
 }
 
 function startSASSBuild() {
@@ -82,58 +87,39 @@ function startBrowserSync() {
 function initYargs() {
     return require('yargs')
         .usage('Usage: $0 <command> [options]')
-        .command("run", "launches your development session backed by SASS & Browser-Sync", {
-            cssRootFolder: {
-                alias: 'cr',
-                default: defaultConfig.cssRootFolder,
-                describe: ''
-            },
-            cssIn: {
-                alias: 'i',
-                default: defaultConfig.cssIn,
-                describe: 'scss filename'
-            },
-            cssOut: {
-                alias: 'o',
-                default: defaultConfig.cssOut,
-                describe: 'css filename for production'
-            },
-            cssOutDev: {
-                alias: 'd',
-                default: defaultConfig.cssOutDev,
-                describe: 'css filename for development'
-            },
-            browsersyncRootFolder: {
-                alias: 'br',
-                default: defaultConfig.browsersyncRootFolder,
-                describe: 'root folder to server static content'
-            },
-            browsersyncWatchFiles: {
-                alias: 'w',
-                default: defaultConfig.browsersyncWatchFiles,
-                describe: 'file path to watch'
-            },
-            browsersyncUpstreamHttpServer: {
-                alias: 'u',
-                default: defaultConfig.browsersyncUpstreamHttpServer,
-                describe: 'URL of the upstream server'
+        .options({
+                cssRootFolder: {
+                    default: defaultConfig.cssRootFolder,
+                    describe: ''
+                },
+                cssIn: {
+                    default: defaultConfig.cssIn,
+                    describe: 'scss filename'
+                },
+                cssOut: {
+                    default: defaultConfig.cssOut,
+                    array: true,
+                    describe: 'filename(s)'
+                },
+                browsersyncRootFolder: {
+                    default: defaultConfig.browsersyncRootFolder,
+                    describe: 'root folder to server static content'
+                },
+                browsersyncWatchFiles: {
+                    default: defaultConfig.browsersyncWatchFiles,
+                    describe: 'file path to watch'
+                },
+                browsersyncUpstreamHttpServer: {
+                    default: defaultConfig.browsersyncUpstreamHttpServer,
+                    describe: 'URL of the upstream server'
+                }
             }
-        })
-        .command("build", "processes --cssIn into --cssOut", {
-            rootFolder: {
-                alias: 'root',
-                default: ''
-            }
-        })
-        .check(function (argv, options) {
-            return (argv._.includes('run') ^ argv._.includes('build'))
-        }, true)
+        )
         .fail(function (msg, err, yargs) {
             if (err) throw err; // preserve stack
             console.error('You broke it!');
             console.error('You should be doing', yargs.help());
             process.exit(1)
         })
-        .demandCommand(1, 1)
         .argv;
 }
