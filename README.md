@@ -19,7 +19,7 @@ npm i css-workflow -g
 ~~~
 ## Usage
 ~~~
-css-worflow
+css-workflow
 ~~~
 this would use our default configuration, so you have to specify some options
 
@@ -36,13 +36,13 @@ Option | Info
 
 ### Chrome Developer Tools
 
- #### Requirement
-    Activate CSS-Sourcemaps in the Developer settings
+#### Requirement
+Activate CSS-Sourcemaps in the Developer settings
  
- #### About
- You can use Chrome Workspaces to make changes directly from Chrome.
- You can play with css settings in the CSS Properties Explorer, this changes aren´t saved.
- To save a file simply open the scss file under Chrome (there clickable filename in the CSS Properties Explorer) and save it.
+#### About
+You can use Chrome Workspaces to make changes directly from Chrome.
+You can play with css settings in the CSS Properties Explorer, this changes aren´t saved.
+To save a file simply open the scss file under Chrome (there clickable filename in the CSS Properties Explorer) and save it.
 
 [npm-url]: https://www.npmjs.com/package/css-workflow
 [npm-image]: https://img.shields.io/npm/v/css-workflow.svg
