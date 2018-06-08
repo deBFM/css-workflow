@@ -1,8 +1,8 @@
 {
   "cssRootFolder": "../../w/WebContent/css",
   "cssIn": "hs.scss",
-  "cssOut": ["hs.css", "hs_static.css"],
+  "cssOut": ["hs.css"],
   "browsersyncRootFolder": "http_server_root",
-  "browsersyncWatchFiles": "w.nsf/css/hs_static.css",
+  "browsersyncWatchFiles": "w.nsf/css/hs.css",
   "browsersyncUpstreamHttpServer": "http://www4.dmz.hamburger-software.de"
 }
